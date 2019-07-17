@@ -26,31 +26,35 @@ export TOP_DIR OBJ_DIR BIN_DIR INC_DIR
 export SRC_FS SRC_CLI SRC_COMMON SRC_NETWORK
 export OBJ_LIB
 
-all: CHECK_DIR $(SRC_FS) $(SRC_CLI) $(SRC_COMMON) $(SRC_NETWORK) $(SRV_TARGET) $(CLI_TARGET)
+#all: CHECK_DIR $(SRC_FS) $(SRC_CLI) $(SRC_COMMON) $(SRC_NETWORK) $(SRV_TARGET) $(CLI_TARGET)
+all: CHECK_DIR $(SRC_FS) $(SRC_COMMON) $(SRV_TARGET) $(CLI_TARGET)
 
 CHECK_DIR:
-    mkdir -p $(OBJ_DIR) $(BIN_DIR)
+	mkdir -p $(OBJ_DIR) $(BIN_DIR)
 
 $(SRC_FS): ECHO
-    $(MAKE) -C $@
+	$(MAKE) -C $@
 $(SRC_CLI) : ECHO
-    $(MAKE) - C $@
+	$(MAKE) -C $@
 $(SRC_COMMON) : ECHO
-    $(MAKE) - C $@
+	$(MAKE) -C $@
 $(SRC_NETWORK) : ECHO
-    $(MAKE) - C $@
+	$(MAKE) -C $@
 
 $(SRV_TARGET):
-    $(CC) $(CC_FLAGS) -o $(addprefix $(BINDIR)/, $(SRV_TARGET)) $$(find ./${OBJ_DIR} -name '*.o')
+	$(CC) $(CC_FLAGS) -o $(addprefix $(BIN_DIR)/, $(SRV_TARGET)) $$(find ${OBJ_DIR} -name '*.o')
 $(CLI_TARGET):
-    $(CC) $(CC_FLAGS) -o $(addprefix $(BINDIR)/, $(SRV_TARGET)) $$(find ./${SRC_CLI} -name '*.o')
+	$(CC) $(CC_FLAGS) -o $(addprefix $(BIN_DIR)/, $(SRV_TARGET)) $$(find ${SRC_CLI} -name '*.o')
+
+ECHO:
+	@echo $@
 
 .PHONY : clean
 
 clean :
-    $(MAKE) -C $(SRC_FS) clean
-    $(MAKE) -C $(SRC_CLI) clean
-    $(MAKE) -C $(SRC_COMMON) clean
-    $(MAKE) -C $(SRC_NETWORK) clean
-    rm -rf $(OBJ_DIR)
+	$(MAKE) -C $(SRC_FS) clean
+	$(MAKE) -C $(SRC_CLI) clean
+	$(MAKE) -C $(SRC_COMMON) clean
+	$(MAKE) -C $(SRC_NETWORK) clean
+	rm -rf $(OBJ_DIR)
 

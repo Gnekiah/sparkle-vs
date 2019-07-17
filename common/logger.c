@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifdef _WIN32 || _WIN64
+#if defined(_WIN32) || defined(_WIN64)
 #pragma warning(disable : 4996)
 #endif
 
@@ -41,7 +41,7 @@ int logger_init(const char* path, const int level)
     strcpy(logger.path, path);
     logger.level = level;
 
-    logger.buff = (struct logger_field*)malloc(logger.buff_size * sizeof(struct logger_field));
+    logger.buff = (struct log_t*)malloc(logger.buff_size * sizeof(struct log_t));
     if (!logger.buff)
         return -1;
     return 0;
@@ -51,5 +51,4 @@ void logger_exit()
 {
     free(logger.buff);
     logger.buff = NULL;
-    return 0;
 }

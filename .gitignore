@@ -54,3 +54,5 @@ dkms.conf
 # User Define
 .vs
 msvc/x64/
+build/
+bin/
