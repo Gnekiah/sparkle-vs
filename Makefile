@@ -44,7 +44,7 @@ $(SRC_NETWORK) : ECHO
 $(SRV_TARGET):
 	$(CC) $(CC_FLAGS) -o $(addprefix $(BIN_DIR)/, $(SRV_TARGET)) $$(find ${OBJ_DIR} -name '*.o')
 $(CLI_TARGET):
-	$(CC) $(CC_FLAGS) -o $(addprefix $(BIN_DIR)/, $(SRV_TARGET)) $$(find ${SRC_CLI} -name '*.o')
+#	$(CC) $(CC_FLAGS) -o $(addprefix $(BIN_DIR)/, $(SRV_TARGET)) $$(find ${SRC_CLI} -name '*.o')
 
 ECHO:
 	@echo $@
