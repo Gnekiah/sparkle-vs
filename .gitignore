@@ -56,3 +56,4 @@ dkms.conf
 msvc/x64/
 build/
 bin/
+x64/
