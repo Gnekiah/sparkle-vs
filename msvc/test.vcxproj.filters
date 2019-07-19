@@ -1,2 +1,172 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\common\logger.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\mutex.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\thread.c">
+      <Filter>src\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\test\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{27fae742-35c2-481f-8216-58b25eb9267c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\common">
+      <UniqueIdentifier>{9893c19b-7de1-4a2a-9412-42d2944848ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tst_common">
+      <UniqueIdentifier>{ca4fff93-3c27-4f2d-ba7d-a6520274be9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tst_fs">
+      <UniqueIdentifier>{69e166e5-80f0-4e2a-ad4c-bcaddee71b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tst_network">
+      <UniqueIdentifier>{8cb8d99d-f766-4a09-982d-59e1782d3918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tst_cli">
+      <UniqueIdentifier>{a8eb68f9-6ba5-44cb-9613-3cb109bb3e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\fs">
+      <UniqueIdentifier>{f8a42732-b1d8-4e8d-9415-7438e16e39db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cli">
+      <UniqueIdentifier>{1965ea94-9708-4146-9473-3fb6315fb9b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\network">
+      <UniqueIdentifier>{c3c132a1-c720-4e9e-95a4-b1090ffc0b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\include">
+      <UniqueIdentifier>{af658eef-b4ea-4fce-93ff-e6704f31ed99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\win64">
+      <UniqueIdentifier>{b01a603b-17a8-4ca9-be4c-520d1467a02a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\win64\event2">
+      <UniqueIdentifier>{4d8d3f35-0bd3-41b0-9cc7-507ced22ab25}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\logger.h">
+      <Filter>src\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\mutex.h">
+      <Filter>src\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\thread.h">
+      <Filter>src\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\tst_logger.h">
+      <Filter>tst_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\tst_mutex.h">
+      <Filter>tst_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\test\tst_thread.h">
+      <Filter>tst_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\evdns.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\evhttp.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\evrpc.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\evutil.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\pthread.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\sched.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\semaphore.h">
+      <Filter>src\win64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\buffer.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\buffer_compat.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\bufferevent.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\bufferevent_compat.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\bufferevent_ssl.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\bufferevent_struct.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\dns.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\dns_compat.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\dns_struct.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\event.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\event_compat.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\event_struct.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\http.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\http_compat.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\http_struct.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\keyvalq_struct.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\listener.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\rpc.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\rpc_compat.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\rpc_struct.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\tag.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\tag_compat.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\thread.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\util.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win64\include\event2\visibility.h">
+      <Filter>src\win64\event2</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

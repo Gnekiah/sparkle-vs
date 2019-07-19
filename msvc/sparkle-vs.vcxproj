@@ -43,7 +43,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\win64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\win64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>..\include;..\win64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\win64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -54,6 +59,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>libevent.lib;libevent_core.lib;libevent_extras.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -69,16 +75,56 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>libevent.lib;libevent_core.lib;libevent_extras.lib;pthreadVC2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\hashlib.c" />
     <ClCompile Include="..\common\logger.c" />
     <ClCompile Include="..\common\mutex.c" />
+    <ClCompile Include="..\common\thread.c" />
+    <ClCompile Include="..\common\timelib.c" />
     <ClCompile Include="..\fs\main.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\hashlib.h" />
     <ClInclude Include="..\include\logger.h" />
     <ClInclude Include="..\include\mutex.h" />
+    <ClInclude Include="..\include\thread.h" />
+    <ClInclude Include="..\include\timelib.h" />
+    <ClInclude Include="..\win64\include\evdns.h" />
+    <ClInclude Include="..\win64\include\event.h" />
+    <ClInclude Include="..\win64\include\event2\buffer.h" />
+    <ClInclude Include="..\win64\include\event2\bufferevent.h" />
+    <ClInclude Include="..\win64\include\event2\bufferevent_compat.h" />
+    <ClInclude Include="..\win64\include\event2\bufferevent_ssl.h" />
+    <ClInclude Include="..\win64\include\event2\bufferevent_struct.h" />
+    <ClInclude Include="..\win64\include\event2\buffer_compat.h" />
+    <ClInclude Include="..\win64\include\event2\dns.h" />
+    <ClInclude Include="..\win64\include\event2\dns_compat.h" />
+    <ClInclude Include="..\win64\include\event2\dns_struct.h" />
+    <ClInclude Include="..\win64\include\event2\event.h" />
+    <ClInclude Include="..\win64\include\event2\event_compat.h" />
+    <ClInclude Include="..\win64\include\event2\event_struct.h" />
+    <ClInclude Include="..\win64\include\event2\http.h" />
+    <ClInclude Include="..\win64\include\event2\http_compat.h" />
+    <ClInclude Include="..\win64\include\event2\http_struct.h" />
+    <ClInclude Include="..\win64\include\event2\keyvalq_struct.h" />
+    <ClInclude Include="..\win64\include\event2\listener.h" />
+    <ClInclude Include="..\win64\include\event2\rpc.h" />
+    <ClInclude Include="..\win64\include\event2\rpc_compat.h" />
+    <ClInclude Include="..\win64\include\event2\rpc_struct.h" />
+    <ClInclude Include="..\win64\include\event2\tag.h" />
+    <ClInclude Include="..\win64\include\event2\tag_compat.h" />
+    <ClInclude Include="..\win64\include\event2\thread.h" />
+    <ClInclude Include="..\win64\include\event2\util.h" />
+    <ClInclude Include="..\win64\include\event2\visibility.h" />
+    <ClInclude Include="..\win64\include\evhttp.h" />
+    <ClInclude Include="..\win64\include\evrpc.h" />
+    <ClInclude Include="..\win64\include\evutil.h" />
+    <ClInclude Include="..\win64\include\pthread.h" />
+    <ClInclude Include="..\win64\include\sched.h" />
+    <ClInclude Include="..\win64\include\semaphore.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
