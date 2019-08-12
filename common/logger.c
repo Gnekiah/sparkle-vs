@@ -32,12 +32,15 @@ int logging(const char* log, const char* caller, const int level)
 }
 
 int logging_ts() 
-{
+{ 
     return 0;
 }
 
 int logger_init(const char* path, const int level)
 {
+    if (logger.buff) /* logger had inited */
+        return -2;
+
     strcpy(logger.path, path);
     logger.level = level;
 

@@ -5,10 +5,10 @@
 #include <stdio.h>
 #include <assert.h>
 
-volatile int flag = 0;
-volatile int flag1 = 0;
-volatile int flag2 = 0;
-volatile int flag3 = 0;
+volatile unsigned int flag = 0;
+volatile unsigned int flag1 = 0;
+volatile unsigned int flag2 = 0;
+volatile unsigned int flag3 = 0;
 
 void* func_thrd(void* ptr)
 {

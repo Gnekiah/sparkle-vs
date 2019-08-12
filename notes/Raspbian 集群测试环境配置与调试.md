@@ -1,7 +1,7 @@
 ---
 title: Raspbian 集群测试环境配置与调试
 created: '2019-07-08T06:31:22.079Z'
-modified: '2019-07-24T09:58:21.193Z'
+modified: '2019-08-12T02:43:43.322Z'
 ---
 
 # Raspbian 集群测试环境配置与调试
@@ -75,11 +75,134 @@ root@pi# scp root@172.28.34.x:/root/.ssh/id_rsa.pub ~/tmp/ && cat ~/tmp/id_rsa.p
 ### 网络限流
 
 ## Ceph
-树莓派采用 ARM 架构，尽管 Raspbian 基于 Debian 且使用了相同的 apt 包管理，但是所有的软件包都需要用 armhf 重新编译。这里没有从 Raspbian 官方源中找到 Ceph
+树莓派采用 ARM 架构，尽管 Raspbian 基于 Debian 且使用了相同的 apt 包管理，但是所有的软件包都需要用 armhf 重新编译。这里没有从 Raspbian 官方源中找到能用的 Ceph。以下采用手动编译。
+### CEPH 集群部署
+- 需要的包安装
 ```
-root@pi# apt install ceph
+root@pi# apt-get install vim screen htop iotop btrfs-tools lsb-release gdisk
+```
+- 修改源文件 /etc/apt/sources.list
+```
+deb http://mirrordirector.raspbian.org/raspbian/ testing main contrib non-free rpi
+#deb-src http://archive.raspbian.org/raspbian/ testing main contrib non-free rpi
+```
+- 更新仓库列表，并配置 ceph 源与官方密钥
+```
+root@pi# apt-get update
+root@pi# wget --no-check-certificate -q -O- 'https://ceph.com/git/?p=ceph.git&a=blob_plain&f=keys/release.asc' | apt-key add -
+root@pi# echo deb http://ceph.com/debian-firefly/ wheezy main | sudo tee /etc/apt/sources.list.d/ceph.list
 
+root@pi# apt-get update
+root@pi# apt-get install ceph-deploy ceph ceph-common
 ```
+- 添加 /etc/hosts 主机名
+```
+127.0.0.1       raspberrypi
+172.28.34.1     pi1
+172.28.34.2     pi2
+172.28.34.3     pi3
+172.28.34.4     pi4
+172.28.34.5     pi5
+```
+- 生成唯一 uuid，创建 /etc/ceph/ceph.conf 并添加配置内容
+```
+fsid=c4489f2e-4c0c-4a75-ba2c-df8b7073a26b
+mon initial members = pi1
+mon host = 172.28.34.1
+
+auth_cluster_required = cephx
+auth_service_required = cephx
+auth_client_required = cephx
+
+osd_crush_chooseleaf_type = 1
+osd_pool_default_szie = 1
+osd_journal_size = 100
+```
+- 为此集群创建密钥环、并生成监视器密钥
+```
+croot@pi# eph-authtool --create-keyring /etc/ceph/ceph.mon.keyring --gen-key -n mon. --cap mon 'allow *'
+```
+- 生成管理员密钥环，生成 client.admin 用户并加入密钥环
+```
+root@pi# ceph-authtool --create-keyring /etc/ceph/ceph.client.admin.keyring --gen-key -n client.admin --set-uid=0 --cap mon 'allow *' --cap osd 'allow *' --cap mds 'allow' --cap mgr 'allow *'
+```
+- 把 client.admin 密钥加入 ceph.mon.keyring
+```
+root@pi# ceph-authtool /etc/ceph/ceph.mon.keyring --import-keyring /etc/ceph/ceph.client.admin.keyring
+```
+- 用规划好的主机名、对应 IP 地址、和 FSID 生成一个监视器图
+```
+root@pi# monmaptool --create --add pi1 172.28.34.1 --fsid c4489f2e-4c0c-4a75-ba2c-df8b7073a26b /ceph-data/monmap
+```
+- 在监视器主机上分别创建数据目录
+```
+root@pi# mkdir /var/lib/ceph/mon/ceph-pi1
+root@pi# chown -R ceph.ceph /var/lib/ceph/mon/ceph-pi1/
+```
+- 用监视器图和密钥环组装守护进程所需的初始数据
+```
+root@pi# ceph-mon --mkfs -i pi1 --keyring /etc/ceph/ceph.mon.keyring
+```
+- 启动监视器
+```
+root@pi# systemctl restart ceph-mon@pi1
+```
+
+### 创建 OSD
+- ~~创建块设备~~
+~~`root@pi# dd if=/dev/zero of=/cephimage bs=4M count=1024`~~
+```
+root@pi# ceph osd create
+root@pi# mkdir /var/lib/ceph/osd/ceph-0
+root@pi# ceph-osd -i 0 --mkfs --mkkey
+root@pi# ceph auth add osd.0 osd 'allow *' mon 'allow rwx' -i /var/lib/ceph/osd/ceph-0/keyring
+root@pi# ceph osd crush add osd.0 0.2 host=pi1
+root@pi# systemctl enable ceph-osd@0
+root@pi# chown -R ceph:ceph /var/lib/ceph/osd/ceph-0/
+root@pi# systemctl start ceph-osd@0
+```
+
+### 创建 MGR
+```
+root@pi# mkdir /var/lib/ceph/mgr/ceph-pi1
+root@pi# ceph auth get-or-create mgr.pi1 mon 'allow *' osd 'allow *' mds 'allow *' -o /var/lib/ceph/mgr/ceph-pi1/keyring
+root@pi# chown ceph:ceph -R /var/lib/ceph/mgr/ceph-pi1/
+root@pi# systemctl enable ceph-mgr@pi1
+root@pi# systemctl start ceph-mgr@pi1
+```
+
+### 创建 MDS
+```
+root@pi# mkdir -p /var/lib/ceph/mds/ceph-pi1
+root@pi# ceph auth get-or-create mds.pi1 mds 'allow *' osd 'allow rwx' mon 'allow profile mds' -o /var/lib/ceph/mds/ceph-pi1/keyring
+root@pi# systemctl enable ceph-mds@pi1
+root@pi# systemctl start ceph-mds@pi1
+```
+
+### 创建 pool
+```
+root@pi# ceph osd pool create fsdata 128 128
+root@pi# ceph osd pool create fsmetadata 128 128
+```
+
+### 创建 ceph 文件系统
+```
+root@pi# ceph fs new cephfs fsmetadata fsdata
+root@pi# ceph mds stat
+```
+
+### 将 ceph fs 挂载到 fuse
+```
+root@pi# mkdir /cephinterface
+root@pi# ceph-fuse -m 172.28.34.1:6821 /cephinterface
+```
+
+### 疑难杂症
+- Reduced data availability: 234 pgs inactive
+```
+root@pi# ceph osd pool set ceph_benchmark min_size 1
+```
+
 
 ## HDFS
 ### 安装及配置
@@ -179,12 +302,13 @@ root@pi# scp -r /root/hadoop-3.1.2 root@172.28.34.3:/root/
 root@pi# scp -r /root/hadoop-3.1.2 root@172.28.34.4:/root/
 root@pi# scp -r /root/hadoop-3.1.2 root@172.28.34.5:/root/
 ```
+- 方便起见，通过 git 同步各个节点的配置文件 /root/hadoop-3.1.2/etc/hadoop/*
 
 ### 运行测试
 - 格式化并启动
 ```
 root@pi# /root/hadoop-3.1.2/bin/hdfs namenode -format
-root@pi# /root/hadoop-3.1.2/sbin/start-all.sh
+root@pi# /root/hadoop-3.1.2/sbin/start-dfs.sh
 ```
 
 

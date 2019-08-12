@@ -1,6 +1,10 @@
 #ifndef LOGGER_H_
 #define LOGGER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 #define LOG_LEVEL_OFF           0
@@ -38,5 +42,8 @@ extern int logging_ts();
 extern int logger_init(const char *path, const int level);
 extern void logger_exit();
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* LOGGER_H_ */

@@ -1,6 +1,10 @@
 #ifndef MUTEX_H_
 #define MUTEX_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef __linux__
 #include <pthread.h>
 #elif defined(_WIN32) || defined(_WIN64)
@@ -17,5 +21,9 @@ extern inline int mutex_init(mutex_t* mutex);
 extern inline int mutex_destroy(mutex_t* mutex);
 extern inline int mutex_lock(mutex_t* mutex);
 extern inline int mutex_unlock(mutex_t* mutex);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* MUTEX_H_ */
